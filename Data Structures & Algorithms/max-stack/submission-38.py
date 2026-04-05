@@ -1,0 +1,52 @@
+class MaxStack:
+
+    def __init__(self):
+        self.stack = []
+        self.heap = []
+        self.counter = 0
+        self.removed = set()
+        
+
+    def push(self, x: int) -> None:
+        self.stack.append((x, -self.counter))
+        heapq.heappush(self.heap,(-x,-self.counter))
+        self.counter+=1
+        
+
+    def pop(self) -> int:
+        while self.stack and self.stack[-1][1] in self.removed:
+            self.stack.pop()
+        popped = self.stack.pop()
+        self.removed.add(popped[1])
+        return popped[0]
+        
+
+    def top(self) -> int:
+        while self.stack and self.stack[-1][1] in self.removed:
+            self.stack.pop()
+        return self.stack[-1][0]
+        
+        
+
+    def peekMax(self) -> int:
+        while self.heap and self.heap[0][1] in self.removed:
+            heapq.heappop(self.heap)
+        return self.heap[0][0] * -1
+
+
+    def popMax(self) -> int:
+        while self.heap and self.heap[0][1] in self.removed:
+            heapq.heappop(self.heap)
+        popped = heapq.heappop(self.heap)
+        self.removed.add(popped[1])
+        return popped[0] * -1
+        
+
+
+# Your MaxStack object will be instantiated and called as such:
+# obj = MaxStack()
+# obj.push(x)
+# param_2 = obj.pop()
+# param_3 = obj.top()
+# param_4 = obj.peekMax()
+# param_5 = obj.popMax()
